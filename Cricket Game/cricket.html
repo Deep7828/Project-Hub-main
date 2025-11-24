@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bat Ball Game</title>
+    <link rel="stylesheet" href="./cricket.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=restart_alt"
+    />
+  </head>
+  <body>
+    <div class="game">
+      <div class="heading">
+        <p>Cricket Game</p>
+      </div>
+      <div class="user-choice">
+        <button class="user-button" onclick="playGame('BAT')" aria-label="Bat">
+          <img class="choice-image" src="./images/bat.png" alt="Bat Image" />
+        </button>
+        <button class="user-button" onclick="playGame('BALL')">
+          <img class="choice-image" src="./images/ball.png" alt="Ball Image" />
+        </button>
+        <button class="user-button" onclick="playGame('STUMP')">
+          <img
+            class="choice-image"
+            src="./images/stump.png"
+            alt="Stump Image"
+          />
+        </button>
+      </div>
+      <div class="display">
+        <span class="restart-game" onClick="restartScore()">
+          <span class="material-symbols-outlined"> restart_alt </span>
+        </span>
+        <div class="score-board">
+          <p class="score"></p>
+        </div>
+
+        <p class="move">
+          <span class="user-move"></span><span class="computer-move"></span>
+        </p>
+        <p class="result"></p>
+      </div>
+    </div>
+
+    <script>
+      let score = JSON.parse(localStorage.getItem("score")) || {
+        WIN: 0,
+        LOST: 0,
+        TIE: 0,
+      };
+
+      score.dispayScore = () => {
+        localStorage.setItem("score", JSON.stringify(score));
+        return `WIN : ${score.WIN || 0} \n LOST : ${
+          score.LOST || 0
+        } \n TIE  : ${score.TIE || 0}`;
+      };
+
+      function restartScore() {
+        // console.log("restart score called");
+        score.WIN = 0;
+        score.LOST = 0;
+        score.TIE = 0;
+        dispalyDecision();
+        displayMove();
+        score.dispayScore();
+        localStorage.clear();
+      }
+
+      dispalyDecision();
+      score.dispayScore();
+
+      function generateComputerChoice() {
+        let choiceNum = Math.ceil(Math.random() * 3);
+        let choice;
+
+        if (choiceNum === 1) {
+          choice = "BAT";
+        } else if (choiceNum === 2) {
+          choice = "BALL";
+        } else if (choiceNum === 3) {
+          choice = "STUMP";
+        }
+
+        return choice;
+      }
+
+      function playGame(userChoice) {
+        const computerChoice = generateComputerChoice();
+
+        const decision = makeDecision(userChoice, computerChoice);
+        // console.log(decision);
+        dispalyDecision(decision);
+      }
+
+      function dispalyDecision(decision) {
+        let resultBoard = document.querySelector(".result");
+        resultBoard.innerText = decision || "Let's play Game :)";
+        // console.log(resultBoard.innerTEXT);
+        let scoreBoard = document.querySelector(".score");
+        scoreBoard.innerText = score.dispayScore();
+      }
+
+      function displayMove(userMove, computerMove) {
+        //display move:
+        let userMoveElement = document.querySelector(".user-move");
+        let pcMoveElement = document.querySelector(".computer-move");
+        userMoveElement.innerText = userMove ? `YOUR MOVE \n ${userMove}` : "";
+        pcMoveElement.innerText = computerMove
+          ? `PC MOVE \n${computerMove}`
+          : "";
+      }
+
+      function makeDecision(userChoice, computerChoice) {
+        let decision;
+        displayMove(userChoice, computerChoice);
+        if (userChoice === computerChoice) {
+          decision = "Tie !";
+          score.TIE++;
+        } else if (userChoice === "BAT") {
+          switch (computerChoice) {
+            case "BALL":
+              decision = "Won :)";
+              score.WIN++;
+              break;
+            case "STUMP":
+              decision = "Lost !!";
+              score.LOST++;
+              break;
+            default:
+              decision = "something went wrong !!!";
+          }
+        } else if (userChoice === "BALL") {
+          switch (computerChoice) {
+            case "STUMP":
+              decision = "Won :)";
+              score.WIN++;
+              break;
+            case "BAT":
+              decision = "Lost !!";
+              score.LOST++;
+              break;
+            default:
+              decision = "something went wrong !!!";
+          }
+        } else if (userChoice === "STUMP") {
+          switch (computerChoice) {
+            case "BAT":
+              decision = "Won :)";
+              score.WIN++;
+              break;
+            case "BALL":
+              decision = "Lost !!";
+              score.LOST++;
+              break;
+            default:
+              decision = "something went wrong !!!";
+          }
+        } else {
+          decision = "something went wrong !!!";
+          console.warn("something unusual happen !");
+          alert("Restart and try again !");
+        }
+
+        return decision;
+      }
+    </script>
+  </body>
+</html>

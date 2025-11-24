@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Labh Calculator</title>
+    <link rel="stylesheet" href="./calculator.css" />
+  </head>
+  <body>
+    <header></header>
+    <main>
+      <div class="calculator">
+        <input class="display" type="text" readonly />
+        <div class="buttons-container">
+          <div class="button" onClick="updateDisplay('c')">c</div>
+          <div class="button" onClick="updateDisplay('1')">1</div>
+          <div class="button" onClick="updateDisplay('2')">2</div>
+          <div class="button" onClick="updateDisplay('+')">+</div>
+          <div class="button" onClick="updateDisplay('3')">3</div>
+          <div class="button" onClick="updateDisplay('4')">4</div>
+          <div class="button" onClick="updateDisplay('-')">-</div>
+          <div class="button" onClick="updateDisplay('5')">5</div>
+          <div class="button" onClick="updateDisplay('6')">6</div>
+          <div class="button" onClick="updateDisplay('*')">*</div>
+          <div class="button" onClick="updateDisplay('7')">7</div>
+          <div class="button" onClick="updateDisplay('8')">8</div>
+          <div class="button" onClick="updateDisplay('/')">/</div>
+          <div class="button" onClick="updateDisplay('=')">=</div>
+          <div class="button" onClick="updateDisplay('9')">9</div>
+          <div class="button" onClick="updateDisplay('0')">0</div>
+          <div class="button" onClick="updateDisplay('.')">.</div>
+        </div>
+      </div>
+    </main>
+    <footer></footer>
+
+    <script>
+      let display = "";
+
+      function updateDisplay(inputSymbol) {
+        let inputDisplay = document.querySelector(".display");
+        if (inputSymbol === "c") {
+          display = "";
+        } else if (inputSymbol === "=") {
+          display = eval(display);
+        } else {
+          display += inputSymbol;
+        }
+
+        inputDisplay.value = display;
+      }
+    </script>
+  </body>
+</html>
